@@ -12,8 +12,6 @@ from txlib.http.exceptions import NotFoundError
 from transifex import Tx
 
 
-DEFAULT_VENDOR_LOCALE_MAP = {'en_us': 'en'}
-
 DEFAULT_SOURCE_LANGUAGE = 'en_US'
 DEFAULT_I18N_TYPE = 'HTML'
 
@@ -32,14 +30,14 @@ class Sync(object):
 class DeskTxSync(object):
 
     def __init__(self, tx_project_slug, log, locales=None,
-                 vendor_locale_map=None, options=None):
+                 options=None):
 
         self.tx_project_slug = tx_project_slug
         self.log = log
         self.enabled_locales = locales
         self.lower_locales = [l.lower() for l in self.enabled_locales]
         self.options = options
-        self.vendor_locale_map = vendor_locale_map or DEFAULT_VENDOR_LOCALE_MAP
+
         self.reverse_locale_map = dict(
             ((v, k) for k, v in self.vendor_locale_map.iteritems())
         )
@@ -65,12 +63,6 @@ class DeskTxSync(object):
                 self.reverse_locale_map.get(locale.lower(), None)
                 in self.lower_locales
         )
-
-    def desk_locale(self, locale):
-        """Return the Desk-style locale for locale."""
-
-        locale = locale.lower().replace('-', '_')
-        return self.vendor_locale_map.get(locale, locale)
 
     def push(self):
         """Push data from Desk into Transifex."""
@@ -228,17 +220,6 @@ class DeskTutorials(DeskTxSync):
 
         return result
 
-    def desk_to_our_locale(self, desk_locale):
-
-        locale = self.reverse_locale_map.get(
-            desk_locale, desk_locale,
-        )
-
-        pieces = locale.split('_')
-        pieces[1:] = [p.upper() for p in pieces[1:]]
-
-        return "_".join(pieces)
-
     def push(self):
         """Push tutorials to Transifex."""
 
@@ -259,7 +240,7 @@ class DeskTutorials(DeskTxSync):
             )
 
             for translation in a.translations.items().values():
-                our_locale = self.desk_to_our_locale(translation.locale)
+                our_locale = self.content.translation_locale(translation.locale)
 
                 self.log.debug('Checking locale %s', translation.locale)
 
@@ -336,12 +317,12 @@ class DeskTutorials(DeskTxSync):
 
                     desk_article = self.desk.articles().by_id(resource['slug'])
                     desk_translations = desk_article.translations
-                    if self.desk_locale(lang) in desk_translations:
-                        desk_translations[self.desk_locale(lang)].update(
+                    if self.content.content_locale(lang) in desk_translations:
+                        desk_translations[self.content.content_locale(lang)].update(
                             **desk_translation
                         )
                     else:
                         desk_translations.create(
-                            locale=self.desk_locale(lang),
+                            locale=self.content.content_locale(lang),
                             **desk_translation
                         )
