@@ -86,9 +86,9 @@ class DeskTopics(DeskTxSync):
 
         # asssemble the template catalog
         template = babel.messages.catalog.Catalog()
-        for topic in self.desk.topics():
-            if topic.show_in_portal:
-                template.add(topic.name)
+        for topic in self.content.topics():
+            if self.content.topic_translatable(topic):
+                template.add(self.content.topic_string(topic))
 
         # serialize the catalog as a PO file
         template_po = StringIO()
@@ -139,31 +139,29 @@ class DeskTopics(DeskTxSync):
                 )
 
         # now that we've pulled everything from Tx, upload to Desk
-        for topic in self.desk.topics():
+        for topic in self.content.topics():
+            name = self.content.topic_string(topic)
 
             for locale in translated:
 
-                if topic.name in translated[locale]:
+                if name in translated[locale]:
 
                     self.log.debug(
                         'Updating topic (%s) for locale (%s)' %
-                        (topic.name, locale),
+                        (name, locale),
                     )
 
-                    if locale in topic.translations:
-                        topic.translations[locale].update(
-                            name=translated[locale][topic.name].string,
-                        )
-                    else:
-                        topic.translations.create(
-                            locale=locale,
-                            name=translated[locale][topic.name].string,
-                        )
+                    self.content.update_topic_translation(
+                        topic,
+                        locale,
+                        translated[locale][topic.name].string,
+                    )
+
                 else:
 
                     self.log.error(
                         'Topic name (%s) does not exist in locale (%s)' %
-                        (topic['name'], locale),
+                        (name, locale),
                     )
 
 

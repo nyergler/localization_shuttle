@@ -37,18 +37,65 @@ class DeskAdapterTests(unittest.TestCase):
         # others are unmapped
         self.assertEqual(content.translation_locale('fr'), 'fr')
 
-    def test_list_topics(self):
+    def test_topics_delegates_to_deskapi(self):
+        api = mock.MagicMock()
+        api.topics.return_value = [1, 2, 3]
 
-        pass
+        content = desk.DeskContent(api)
 
-    def test_list_articles(self):
+        self.assertEqual(content.topics(), [1, 2, 3])
 
-        pass
+    def test_topic_translatable_if_shown_in_portal(self):
 
-    def test_list_articles_by_id(self):
+        content = desk.DeskContent(mock.Mock())
 
-        pass
+        self.assertTrue(
+            content.topic_translatable(mock.Mock(show_in_portal=True))
+        )
 
-    def test_get_translations(self):
+        self.assertFalse(
+            content.topic_translatable(mock.Mock(show_in_portal=False))
+        )
 
-        pass
+    def test_topic_string_returns_name(self):
+        content = desk.DeskContent(mock.Mock())
+
+        topic = mock.Mock()
+        topic.name = 'blarf'
+
+        self.assertEqual(
+            content.topic_string(topic),
+            'blarf',
+        )
+
+    def test_update_translation_calls_desk_update(self):
+
+        content = desk.DeskContent(mock.Mock())
+
+        topic = mock.Mock(translations={'fr': mock.MagicMock()})
+
+        content.update_topic_translation(
+            topic,
+            'fr',
+            'Bonjour!',
+        )
+
+        topic.translations['fr'].update.assertCalledOnceWith(
+            name='Bonjour!',
+        )
+
+    def test_update_translation_creates_for_new_locale(self):
+
+        content = desk.DeskContent(mock.Mock())
+        topic = mock.MagicMock()
+
+        content.update_topic_translation(
+            topic,
+            'es',
+            'Hola!',
+        )
+
+        topic.translations.create.assert_called_once_with(
+            locale='es',
+            name='Hola!',
+        )

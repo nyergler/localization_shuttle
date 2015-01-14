@@ -23,3 +23,36 @@ class DeskContent(object):
         pieces[1:] = [p.upper() for p in pieces[1:]]
 
         return "_".join(pieces)
+
+    def topics(self):
+        """Return an iterator over content topics."""
+
+        return self.desk.topics()
+
+    def topic_translatable(self, topic):
+        """Return True if the given topic is translatable.
+
+        ``topic`` will be an object from the iterator returned by
+        ``topics``.
+
+        """
+
+        return topic.show_in_portal
+
+    def topic_string(self, topic):
+        """Return the string to use as the translation source."""
+
+        return topic.name
+
+    def update_topic_translation(self, topic, locale, translation):
+        """Update a locale's translation for topic."""
+
+        if locale in topic.translations:
+            topic.translations[locale].update(
+                name=translation,
+            )
+        else:
+            topic.translations.create(
+                locale=locale,
+                name=translation,
+            )
