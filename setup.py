@@ -36,4 +36,8 @@ setup(name='shuttle',
         'console_scripts':
             ['shuttle=shuttle.cli:main'],
     },
+    test_suite='shuttle.tests',
+    tests_require=[
+        'mock',
+    ],
 )

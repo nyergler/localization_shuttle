@@ -1,4 +1,5 @@
 from cStringIO import StringIO
+import logging
 
 import babel.messages.catalog
 import babel.messages.pofile
@@ -15,6 +16,17 @@ DEFAULT_VENDOR_LOCALE_MAP = {'en_us': 'en'}
 
 DEFAULT_SOURCE_LANGUAGE = 'en_US'
 DEFAULT_I18N_TYPE = 'HTML'
+
+
+class Sync(object):
+
+    def __init__(self, content, translation, log=None, locales=None):
+
+        self.content = content
+        self.translation = translation
+
+        self.enabled_locales = locales
+        self.log = log or logging.getLogger()
 
 
 class DeskTxSync(object):
