@@ -97,10 +97,10 @@ def main():
     for sync in sync_types:
 
         if options.push:
-            sync.push()
+            sync.update_translations()
 
         if options.pull:
-            sync.pull()
+            sync.update_content()
 
 if __name__ == '__main__':
     main()

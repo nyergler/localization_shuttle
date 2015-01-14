@@ -59,12 +59,12 @@ class DeskTxSync(object):
                 in self.lower_locales
         )
 
-    def push(self):
+    def update_translations(self):
         """Push data from Desk into Transifex."""
 
         raise NotImplemented()
 
-    def pull(self):
+    def update_content(self):
         """Pull data from Transifex into Desk."""
 
         raise NotImplemented()
@@ -79,8 +79,8 @@ class DeskTopics(DeskTxSync):
 
         self.TOPIC_STRINGS_SLUG = 'desk-topics'
 
-    def push(self):
-        """Push topics to Transifex."""
+    def update_translations(self):
+        """Push topics strings from content to translation."""
 
         tx = Tx(self.tx_project_slug)
 
@@ -104,8 +104,8 @@ class DeskTopics(DeskTxSync):
             project_slug=self.tx_project_slug,
         )
 
-    def pull(self):
-        """Pull topics from Transifex."""
+    def update_content(self):
+        """Pull topic strings translations into content."""
 
         topic_stats = txlib.api.statistics.Statistics.get(
             project_slug=self.tx_project_slug,
@@ -213,7 +213,7 @@ class DeskTutorials(DeskTxSync):
 
         return result
 
-    def push(self):
+    def update_translations(self):
         """Push tutorials to Transifex."""
 
         tx = Tx(self.tx_project_slug)
@@ -269,7 +269,7 @@ class DeskTutorials(DeskTxSync):
 
         return lang_statistics and lang_statistics['completed'] == '100%'
 
-    def pull(self):
+    def update_content(self):
         "Pull Tutorials from Transifex to Desk."""
 
         tx = Tx(self.tx_project_slug)
