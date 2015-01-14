@@ -5,6 +5,9 @@ class DeskContent(object):
         ((v, k) for k, v in LOCALE_MAP.iteritems())
     )
 
+    def __init__(self, deskapi):
+        self.desk = deskapi
+
     def content_locale(self, trans_locale):
 
         trans_locale = trans_locale.lower().replace('-', '_')

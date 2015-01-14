@@ -42,11 +42,6 @@ class DeskTxSync(object):
             ((v, k) for k, v in self.vendor_locale_map.iteritems())
         )
 
-        self.desk = DeskApi2(
-            sitename=settings.DESK_SITENAME,
-            auth=(settings.DESK_USER, settings.DESK_PASSWD),
-        )
-
     def _process_locale(self, locale):
         """Return True if this locale should be processed."""
 

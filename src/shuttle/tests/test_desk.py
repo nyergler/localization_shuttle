@@ -7,10 +7,17 @@ from shuttle.content import desk
 
 class DeskAdapterTests(unittest.TestCase):
 
+    def test_desk_takes_api_wrapper(self):
+
+        api = mock.MagicMock()
+        content = desk.DeskContent(api)
+
+        self.assertEqual(content.desk, api)
+
     def test_content_locale(self):
         """Test locale mapping for translation -> content."""
 
-        content = desk.DeskContent()
+        content = desk.DeskContent(mock.MagicMock())
 
         # en-US, en_US map to en
         self.assertEqual(content.content_locale('en-US'), 'en')
@@ -22,7 +29,7 @@ class DeskAdapterTests(unittest.TestCase):
     def test_translation_locale(self):
         """Test locale mapping for content -> translation."""
 
-        content = desk.DeskContent()
+        content = desk.DeskContent(mock.MagicMock())
 
         # en-US, en_US map to en
         self.assertEqual(content.translation_locale('en'), 'en_US')
