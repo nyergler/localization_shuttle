@@ -1,10 +1,15 @@
 import logging
 import optparse
 
+from deskapi.models import DeskApi2
+
 from shuttle import (
     english,
     sync,
+    transifex,
 )
+
+from shuttle.content import desk
 
 
 HANDLERS = dict(
@@ -58,6 +63,13 @@ def main():
     if locales:
         locales = [l.strip() for l in locales.split(',')]
 
+    deskApi = DeskApi2(
+        sitename=settings.DESK_SITENAME,
+        auth=(settings.DESK_USER, settings.DESK_PASSWD),
+    )
+    content = desk.DeskContent(deskApi)
+    translation = transifex.Tx(tx_project_slug)
+
     sync_types = []
     if options.types == 'all':
 
@@ -65,18 +77,20 @@ def main():
         for handler in HANDLERS:
             sync_types.append(
                 HANDLERS[handler](
-                    log,
+                    content,
+                    translation,
+                    log=log,
                     locales=locales,
-                    options=options,
                 )
             )
 
     else:
         sync_types.append(
             HANDLERS[options.types](
-                log,
+                content,
+                translation,
+                log=log,
                 locales=locales,
-                options=options,
             )
         )
 
