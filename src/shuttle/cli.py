@@ -1,14 +1,17 @@
 import logging
 import optparse
 
-from shuttle import sync
+from shuttle import (
+    english,
+    sync,
+)
 
 
 HANDLERS = dict(
     topics=sync.DeskTopics,
     tutorials=sync.DeskTutorials,
-    english_topics=sync.DeskEnglishTopics,
-    english_tutorials=sync.DeskEnglishTutorials,
+    english_topics=english.DeskEnglishTopics,
+    english_tutorials=english.DeskEnglishTutorials,
 )
 
 
