@@ -59,13 +59,13 @@ class DeskTxSync(object):
                 in self.lower_locales
         )
 
-    def update_translations(self):
-        """Push data from Desk into Transifex."""
+    def update_translations(self, resources=None, force=False):
+        """Update translations from content."""
 
         raise NotImplemented()
 
     def update_content(self):
-        """Pull data from Transifex into Desk."""
+        """Update content translations."""
 
         raise NotImplemented()
 
@@ -79,8 +79,8 @@ class DeskTopics(DeskTxSync):
 
         self.TOPIC_STRINGS_SLUG = 'desk-topics'
 
-    def update_translations(self):
-        """Push topics strings from content to translation."""
+    def update_translations(self, resources=None, force=False):
+        """Update topics strings for translation from content."""
 
         tx = Tx(self.tx_project_slug)
 
@@ -213,15 +213,13 @@ class DeskTutorials(DeskTxSync):
 
         return result
 
-    def update_translations(self):
-        """Push tutorials to Transifex."""
+    def update_translations(self, resources=None, force=False):
+        """Update translations from content."""
 
-        tx = Tx(self.tx_project_slug)
-
-        if self.options.resources:
+        if resources:
             articles = [
                 self.desk.articles().by_id(r.strip())
-                for r in self.options.resources.split(',')
+                for r in resources
             ]
         else:
             articles = self.desk.articles()
@@ -245,7 +243,7 @@ class DeskTutorials(DeskTxSync):
                 tx.get_project(our_locale)
 
                 a_id = a.api_href.rsplit('/', 1)[1]
-                if (self.options.force or
+                if (force or
                     not tx.resource_exists(a_id, our_locale) or
                     translation.outdated
                 ):

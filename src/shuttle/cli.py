@@ -41,6 +41,7 @@ def parse_args():
     parser.add_option('-l', '--locales', action='store',
                       help="Comma delimited list of locales to process.")
     parser.add_option('-r', '--resources', action='store',
+                      default='',
                       help="Comma delimited list of Desk Resource IDs to sync "
                       "(only supported for tutorials)",
     )
@@ -97,7 +98,10 @@ def main():
     for sync in sync_types:
 
         if options.push:
-            sync.update_translations()
+            sync.update_translations(
+                resources=options.resources.split(','),
+                force=options.force,
+            )
 
         if options.pull:
             sync.update_content()
