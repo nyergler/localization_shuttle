@@ -9,7 +9,7 @@ import txlib.api.statistics
 import txlib.api.translations
 from txlib.http.exceptions import NotFoundError
 
-from transifex import Tx
+from shuttle.translators.transifex import Tx
 
 
 DEFAULT_SOURCE_LANGUAGE = 'en_US'

@@ -6,7 +6,6 @@ from deskapi.models import DeskApi2
 from shuttle import (
     english,
     sync,
-    transifex,
 )
 
 from shuttle.content import desk
