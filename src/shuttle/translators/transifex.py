@@ -9,8 +9,6 @@ from txlib.api import (
     statistics,
 )
 
-LOCALES = ('fr_CA', 'fr_FR', 'es_ES')
-
 UNTRANSLATED_LOCALES = ('en', 'en-us',)
 DEFAULT_SOURCE_LANGUAGE = 'en_US'
 DEFAULT_I18N_TYPE = 'HTML'

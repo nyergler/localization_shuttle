@@ -3,8 +3,6 @@ import logging
 
 import babel.messages.catalog
 import babel.messages.pofile
-from deskapi.models import DeskApi2
-from django.conf import settings
 import txlib.api.statistics
 import txlib.api.translations
 from txlib.http.exceptions import NotFoundError
