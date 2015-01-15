@@ -38,10 +38,6 @@ class DeskTxSync(object):
         self.lower_locales = [l.lower() for l in self.enabled_locales]
         self.options = options
 
-        self.reverse_locale_map = dict(
-            ((v, k) for k, v in self.vendor_locale_map.iteritems())
-        )
-
     def _process_locale(self, locale):
         """Return True if this locale should be processed."""
 
@@ -50,12 +46,12 @@ class DeskTxSync(object):
 
         return (locale in self.enabled_locales or
 
-                self.reverse_locale_map.get(locale.lower(), None)
+                self.content.translation_locale(locale)
                 in self.enabled_locales or
 
                 locale in self.lower_locales or
 
-                self.reverse_locale_map.get(locale.lower(), None)
+                self.content.translation_locale(locale.lower())
                 in self.lower_locales
         )
 
