@@ -59,7 +59,7 @@ class DeskTxSync(object):
 
         raise NotImplemented()
 
-    def update_content(self):
+    def update_content(self, resources=None, force=False):
         """Update content translations."""
 
         raise NotImplemented()
@@ -98,7 +98,7 @@ class DeskTopics(DeskTxSync):
             project_slug=self.tx_project_slug,
         )
 
-    def update_content(self):
+    def update_content(self, resources=None, force=False):
         """Pull topic strings translations into content."""
 
         topic_stats = txlib.api.statistics.Statistics.get(
@@ -260,7 +260,7 @@ class DeskTutorials(DeskTxSync):
 
         return lang_statistics and lang_statistics['completed'] == '100%'
 
-    def update_content(self):
+    def update_content(self, resources=None, force=False):
         "Pull Tutorials from Transifex to Desk."""
 
         tx = self.translation
@@ -279,9 +279,9 @@ class DeskTutorials(DeskTxSync):
                 self.log.error('No project found for locale %s', lang)
                 continue
 
-            if self.options.resources:
+            if resources:
                 pull_resources = [
-                    r.strip() for r in self.options.resources.split(',')
+                    r.strip() for r in resources.split(',')
                 ]
 
                 resources = [
