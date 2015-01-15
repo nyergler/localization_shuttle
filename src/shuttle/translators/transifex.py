@@ -18,6 +18,15 @@ DEFAULT_I18N_TYPE = 'HTML'
 
 class Tx(object):
 
+    @classmethod
+    def add_arguments(cls, parser):
+        pass
+
+    @classmethod
+    def get_option_names(cls):
+
+        return []
+
     def __init__(self, project_slug_prefix):
 
         self.__project_slug_prefix = project_slug_prefix

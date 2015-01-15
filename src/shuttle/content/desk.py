@@ -1,3 +1,6 @@
+from deskapi.models import DeskApi2
+
+
 class DeskContent(object):
 
     LOCALE_MAP = {'en_us': 'en'}
@@ -5,8 +8,28 @@ class DeskContent(object):
         ((v, k) for k, v in LOCALE_MAP.iteritems())
     )
 
-    def __init__(self, deskapi):
+    @classmethod
+    def add_arguments(cls, parser):
+
+        parser.add_argument('--desk-site')
+        parser.add_argument('--desk-user')
+        parser.add_argument('--desk-passwd')
+
+    @classmethod
+    def get_option_names(cls):
+
+        return ('desk_site', 'desk_user', 'desk_passwd')
+
+    def __init__(self, deskapi,
+                 desk_site=None, desk_user=None, desk_passwd=None,
+    ):
         self.desk = deskapi
+
+        if self.desk is None:
+            deskApi = DeskApi2(
+            sitename=desk_site,
+            auth=(desk_user, desk_passwd),
+        )
 
     def content_locale(self, trans_locale):
 
