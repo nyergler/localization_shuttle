@@ -24,18 +24,9 @@ class Sync(object):
         self.translation = translation
 
         self.enabled_locales = locales
-        self.log = log or logging.getLogger()
-
-
-class DeskTxSync(object):
-
-    def __init__(self, log, locales=None,
-                 options=None):
-
-        self.log = log
-        self.enabled_locales = locales
         self.lower_locales = [l.lower() for l in self.enabled_locales]
-        self.options = options
+
+        self.log = log or logging.getLogger()
 
     def _process_locale(self, locale):
         """Return True if this locale should be processed."""
@@ -65,7 +56,7 @@ class DeskTxSync(object):
         raise NotImplemented()
 
 
-class DeskTopics(DeskTxSync):
+class DeskTopics(Sync):
 
     def __init__(self, *args, **kwargs):
 
@@ -159,7 +150,7 @@ class DeskTopics(DeskTxSync):
                     )
 
 
-class DeskTutorials(DeskTxSync):
+class DeskTutorials(Sync):
 
     def __init__(self, *args, **kwargs):
 

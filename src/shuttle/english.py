@@ -7,10 +7,10 @@ from deskapi.models import DeskApi2
 import txlib.api.translations
 from txlib.http.exceptions import NotFoundError
 
-from shuttle.sync import DeskTxSync
+from shuttle.sync import Sync
 
 
-class DeskEnglishTxSync(DeskTxSync):
+class DeskEnglishTxSync(Sync):
 
     def __init__(self, *args, **kwargs):
 

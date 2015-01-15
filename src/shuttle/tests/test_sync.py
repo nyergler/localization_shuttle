@@ -13,7 +13,7 @@ class TestSync(unittest.TestCase):
         tx = MagicMock()
         content = MagicMock()
 
-        sync = shuttle.sync.Sync(content, tx)
+        sync = shuttle.sync.Sync(content, tx, locales=[])
 
         self.assertEqual(sync.translation, tx)
         self.assertEqual(sync.content, content)
