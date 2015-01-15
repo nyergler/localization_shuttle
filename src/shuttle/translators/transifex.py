@@ -1,4 +1,3 @@
-from django.conf import settings
 from txlib import registry
 from txlib.http import auth
 from txlib.http.exceptions import NotFoundError, RemoteServerError
@@ -20,18 +19,27 @@ class Tx(object):
 
     @classmethod
     def add_arguments(cls, parser):
-        pass
+
+        parser.add_argument('--tx-project')
+        parser.add_argument('--tx-host',
+                            default='https://www.transifex.com/',
+        )
+        parser.add_argument('--tx-user')
+        parser.add_argument('--tx-passwd')
 
     @classmethod
     def get_option_names(cls):
 
-        return []
+        return ('tx_project', 'tx_host', 'tx_user', 'tx_passwd')
 
-    def __init__(self, project_slug_prefix):
+    def __init__(self, tx_project=None,
+                 tx_host=None,
+                 tx_user=None, tx_passwd=None,
+    ):
 
-        self.__project_slug_prefix = project_slug_prefix
+        self.__project_slug_prefix = tx_project
 
-        self.setup_registry()
+        self.setup_registry(tx_host, tx_user, tx_passwd)
 
     def projects(self):
         """Yield (project, lang) tuples for all help center projects."""
@@ -76,15 +84,15 @@ class Tx(object):
 
         return "%s-%s" % (self.__project_slug_prefix, locale)
 
-    def setup_registry(self):
+    def setup_registry(self, host, username, password):
 
         registry.registry.setup(
             {
                 'http_handler': http_requests.HttpRequest(
-                    settings.TRANSIFEX_HOST,
+                    host,
                     auth=auth.BasicAuth(
-                        settings.TRANSIFEX_USERNAME,
-                        settings.TRANSIFEX_PASSWORD,
+                        username,
+                        password,
                     ),
                 ),
             },

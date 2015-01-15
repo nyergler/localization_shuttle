@@ -7,8 +7,6 @@ from deskapi.models import DeskApi2
 import txlib.api.translations
 from txlib.http.exceptions import NotFoundError
 
-from translators.transifex import Tx
-
 from shuttle.sync import DeskTxSync
 
 

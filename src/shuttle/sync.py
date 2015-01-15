@@ -29,10 +29,9 @@ class Sync(object):
 
 class DeskTxSync(object):
 
-    def __init__(self, tx_project_slug, log, locales=None,
+    def __init__(self, log, locales=None,
                  options=None):
 
-        self.tx_project_slug = tx_project_slug
         self.log = log
         self.enabled_locales = locales
         self.lower_locales = [l.lower() for l in self.enabled_locales]
@@ -70,15 +69,14 @@ class DeskTopics(DeskTxSync):
 
     def __init__(self, *args, **kwargs):
 
-        super(DeskTopics, self).__init__(settings.TOPICS_PROJECT_SLUG,
-                                         *args, **kwargs)
+        super(DeskTopics, self).__init__(*args, **kwargs)
 
         self.TOPIC_STRINGS_SLUG = 'desk-topics'
 
     def update_translations(self, resources=None, force=False):
         """Update topics strings for translation from content."""
 
-        tx = Tx(self.tx_project_slug)
+        tx = self.translation
 
         # asssemble the template catalog
         template = babel.messages.catalog.Catalog()
@@ -165,8 +163,7 @@ class DeskTutorials(DeskTxSync):
 
     def __init__(self, *args, **kwargs):
 
-        super(DeskTutorials, self).__init__(settings.TUTORIALS_PROJECT_SLUG,
-                                            *args, **kwargs)
+        super(DeskTutorials, self).__init__(*args, **kwargs)
 
     def make_resource_title(self, article):
         """Given a dict of Article information, return the Tx Resource name."""
@@ -266,7 +263,7 @@ class DeskTutorials(DeskTxSync):
     def update_content(self):
         "Pull Tutorials from Transifex to Desk."""
 
-        tx = Tx(self.tx_project_slug)
+        tx = self.translation
 
         for lang in self.enabled_locales:
 
